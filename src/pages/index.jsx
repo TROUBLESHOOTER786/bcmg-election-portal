@@ -270,9 +270,30 @@ const VoterSlip = ({ voter, candidate, compact = false }) => (
 //  VOTER DETAIL MODAL
 // ═══════════════════════════════════════════
 const VoterModal = ({ voter, candidate, onClose, onLogEvent }) => {
+  const slipBlobRef = useRef(null);
+
   useEffect(() => {
     onLogEvent?.("view_slip", { voterId: voter.id, voterName: voter.name, voterEnrolment: voter.enrolment, boothName: voter.booth_name, barAssociation: voter.bar_association, district: voter.district });
   }, []);
+
+  // Pre-generate the slip image as soon as the modal renders
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const node = document.getElementById('voter-slip-capture');
+      if (!node) return;
+      try {
+        const dataUrl = await htmlToImage.toPng(node, { quality: 0.95, pixelRatio: 2 });
+        const res = await fetch(dataUrl);
+        const blob = await res.blob();
+        if (blob && blob.size > 0) {
+          slipBlobRef.current = blob;
+        }
+      } catch (e) {
+        console.warn('Pre-generate slip failed:', e);
+      }
+    }, 500); // small delay to let the DOM fully render
+    return () => clearTimeout(timer);
+  }, [voter]);
 
   const cleanMobile = (m) => { let c = (m || "").replace(/\D/g, ""); if (c.startsWith("91") && c.length > 10) c = c.slice(2); return c; };
 
@@ -286,44 +307,54 @@ const VoterModal = ({ voter, candidate, onClose, onLogEvent }) => {
     const m = cleanMobile(voter.mobile);
     if (!m) { alert("No mobile number available for this voter."); return; }
 
-    const node = document.getElementById('voter-slip-capture');
-
-    if (isMobile() && node && navigator.share && navigator.canShare) {
-      // MOBILE: Use Web Share API — directly attaches image + text
-      try {
-        const dataUrl = await htmlToImage.toPng(node, { quality: 0.95 });
-        const res = await fetch(dataUrl);
-        const blob = await res.blob();
-        if (blob) {
-          const file = new File([blob], `VoterSlip-${voter.name.replace(/\s+/g, '_')}.png`, { type: blob.type });
-          if (navigator.canShare({ files: [file] })) {
-            await navigator.share({
-              text: genMsg(),
-              files: [file]
-            });
-            onLogEvent?.("whatsapp_send", { voterId: voter.id, voterName: voter.name, voterEnrolment: voter.enrolment, boothName: voter.booth_name, district: voter.district, barAssociation: voter.bar_association });
-            return;
-          }
+    // If pre-generated blob isn't ready, generate it now
+    if (!slipBlobRef.current) {
+      const node = document.getElementById('voter-slip-capture');
+      if (node) {
+        try {
+          const dataUrl = await htmlToImage.toPng(node, { quality: 0.95, pixelRatio: 2 });
+          const res = await fetch(dataUrl);
+          slipBlobRef.current = await res.blob();
+        } catch (e) {
+          console.warn('Image generation failed:', e);
         }
-      } catch (e) {
-        if (e.name === 'AbortError') return; // user cancelled share sheet
-        console.warn('Mobile share failed, falling back to desktop method:', e);
       }
     }
 
-    // DESKTOP: Copy image to clipboard + open wa.me direct to voter's number
-    if (node) {
+    const blob = slipBlobRef.current;
+
+    if (isMobile() && blob && blob.size > 0 && navigator.share) {
+      // MOBILE: Share image via native Share API
       try {
-        const dataUrl = await htmlToImage.toPng(node, { quality: 0.95 });
-        const res = await fetch(dataUrl);
-        const blob = await res.blob();
-        if (blob && navigator.clipboard && navigator.clipboard.write) {
-          await navigator.clipboard.write([
-            new ClipboardItem({ [blob.type]: blob })
-          ]);
+        const file = new File([blob], `VoterSlip-${voter.name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
+
+        // Check if device supports file sharing
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          // Share image only (WhatsApp drops text when files are present)
+          await navigator.share({ files: [file] });
+
+          // After sharing image, open wa.me for text message to same voter
+          setTimeout(() => {
+            window.open(`https://wa.me/91${m}?text=${encodeURIComponent(genMsg())}`, '_blank');
+          }, 1000);
+
+          onLogEvent?.("whatsapp_send", { voterId: voter.id, voterName: voter.name, voterEnrolment: voter.enrolment, boothName: voter.booth_name, district: voter.district, barAssociation: voter.bar_association });
+          return;
         }
       } catch (e) {
-        console.warn('Could not copy slip image to clipboard:', e);
+        if (e.name === 'AbortError') return; // user cancelled
+        console.warn('Native share failed:', e);
+      }
+    }
+
+    // DESKTOP FALLBACK: Copy image to clipboard + open direct WhatsApp chat
+    if (blob && blob.size > 0 && navigator.clipboard && navigator.clipboard.write) {
+      try {
+        await navigator.clipboard.write([
+          new ClipboardItem({ 'image/png': blob })
+        ]);
+      } catch (e) {
+        console.warn('Clipboard write failed:', e);
       }
     }
 
