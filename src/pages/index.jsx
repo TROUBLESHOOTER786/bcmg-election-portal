@@ -59,7 +59,7 @@ const DEMO_VOTERS = [
 
 const DEFAULT_CANDIDATE = {
   id: 1, name: "ADV. JAYANT D. JAIBHAVE", ballot_no: "61",
-  tagline: "First Preference", phone: "919876543210", photo_url: null,
+  tagline: "First Preference", phone: "919876543210", photo_url: "/JDJ-Ballot.jpeg",
 };
 
 // ═══════════════════════════════════════════
@@ -74,7 +74,8 @@ const C = {
 };
 
 const GlobalStyle = () => (
-  <style dangerouslySetInnerHTML={{ __html: `
+  <style dangerouslySetInnerHTML={{
+    __html: `
     [data-theme="light"] {
       --bg: #f4f6f8; --bgCard: #ffffff; --bgHover: #f0f2f5;
       --gold: #b58e2a; --goldLight: #c9a84c; --goldDim: rgba(181,142,42,0.12);
@@ -114,8 +115,8 @@ const Icon = {
   Send: () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>,
   Filter: () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg>,
   Map: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>,
-  Sun: () => <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>,
-  Moon: () => <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>,
+  Sun: () => <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg>,
+  Moon: () => <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>,
 };
 
 // ═══════════════════════════════════════════
@@ -194,47 +195,43 @@ const TextInput = ({ value, onChange, placeholder, ...props }) => (
 // ═══════════════════════════════════════════
 const VoterSlip = ({ voter, candidate, compact = false }) => (
   <div id="voter-slip-capture" style={{
-    background: `linear-gradient(145deg, #0a1628, #101f3c, #0b1a30)`,
-    borderRadius: compact ? 12 : 16, padding: compact ? 16 : 22, color: "#fff",
+    background: `linear-gradient(145deg, #fdfdfd, #f5f5f5)`, // Light background
+    border: `1px solid #e0e0e0`,
+    borderRadius: compact ? 12 : 16, padding: compact ? 16 : 22, color: "#0f172a",
     fontFamily: fontSans, position: "relative", overflow: "hidden",
   }}>
-    <div style={{ position: "absolute", top: -50, right: -50, width: 140, height: 140, borderRadius: "50%", background: "rgba(201,168,76,0.06)" }} />
-    <div style={{ position: "absolute", bottom: -30, left: -30, width: 100, height: 100, borderRadius: "50%", background: "rgba(201,168,76,0.04)" }} />
-
-    {/* Header */}
-    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, marginBottom: compact ? 12 : 16, position: "relative", zIndex: 1 }}>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: compact ? 16 : 19, fontWeight: 800, letterSpacing: 0.3, lineHeight: 1.25, fontFamily: font }}>{voter.name}</div>
-        <div style={{ fontSize: 12, color: C.textDim, marginTop: 3 }}>{voter.enrolment}</div>
-      </div>
-      <Badge>F-{voter.sr_no}</Badge>
-    </div>
+    <div style={{ position: "absolute", top: -50, right: -50, width: 140, height: 140, borderRadius: "50%", background: "rgba(181,142,42,0.08)" }} />
+    <div style={{ position: "absolute", bottom: -30, left: -30, width: 100, height: 100, borderRadius: "50%", background: "rgba(181,142,42,0.08)" }} />
 
     {/* Candidate banner */}
     <div style={{
-      background: C.goldDim, border: `1px solid ${C.goldBorder}`,
-      borderRadius: 11, padding: compact ? 12 : 14, marginBottom: compact ? 12 : 14, position: "relative", zIndex: 1,
+      background: `linear-gradient(135deg, #fffdf7, #fff9ed)`,
+      border: `1px solid #e8d48b`,
+      borderRadius: 11, padding: compact ? 14 : 20, marginBottom: compact ? 12 : 16, position: "relative", zIndex: 1,
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        {candidate.photo_url ? (
-          <img src={candidate.photo_url} alt="" style={{ width: 46, height: 46, borderRadius: "50%", objectFit: "cover", border: `2px solid ${C.gold}` }} />
-        ) : (
-          <div style={{ minWidth: 46, width: 46, height: 46, borderRadius: "50%", background: C.goldDim, display: "flex", alignItems: "center", justifyContent: "center", border: `2px solid ${C.gold}`, fontSize: 22, fontWeight: 800, color: C.gold, fontFamily: font }}>
-            {candidate.ballot_no || candidate.name.charAt(0)}
-          </div>
+      <div style={{ display: "flex", alignItems: "stretch", gap: 18 }}>
+        {/* Candidate Photo */}
+        {candidate.photo_url && (
+          <img src={candidate.photo_url} alt="" style={{ width: 165, height: 180, borderRadius: 14, objectFit: "cover", border: `3px solid #b58e2a`, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} />
         )}
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 10, color: C.gold, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5 }}>Your Candidate</div>
-          <div style={{ fontSize: 15, fontWeight: 700, marginTop: 1, fontFamily: font }}>{candidate.name}</div>
-          <div style={{ fontSize: 11, color: C.textDim }}>Ballot No. {candidate.ballot_no}</div>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", minWidth: 0 }}>
+          <div style={{ fontSize: 30, fontWeight: 800, marginTop: 0, fontFamily: "'Montserrat', sans-serif", color: "#dc2626", lineHeight: 1.15, textTransform: "uppercase", letterSpacing: 1 }}>{candidate.ballot_no}</div>
+          <div style={{ fontSize: 22, fontWeight: 800, marginTop: 4, fontFamily: font, color: "#0f172a", lineHeight: 1.15 }}>{candidate.name}</div>
+          <div style={{ marginTop: 12, display: "flex", justifyContent: "flex-end" }}>
+            <div style={{
+              background: "#b58e2a", color: "#ffffff", borderRadius: 8,
+              padding: "10px 28px", fontWeight: 800, fontSize: 14, letterSpacing: 0.5, display: "inline-block",
+            }}>
+              Please vote as {candidate.tagline}
+            </div>
+          </div>
         </div>
       </div>
-      <div style={{
-        marginTop: 10, background: C.gold, color: "#080c12", borderRadius: 7,
-        padding: "7px 0", textAlign: "center", fontWeight: 800, fontSize: 12, letterSpacing: 0.5,
-      }}>
-        Please vote as {candidate.tagline}
-      </div>
+    </div>
+
+    {/* Header */}
+    <div style={{ marginBottom: compact ? 12 : 16, position: "relative", zIndex: 1, padding: "0 6px" }}>
+      <div style={{ fontSize: compact ? 16 : 22, fontWeight: 800, letterSpacing: 0.3, lineHeight: 1.25, fontFamily: font, color: "#0f172a" }}>{voter.name}</div>
     </div>
 
     {/* Details grid */}
@@ -243,27 +240,28 @@ const VoterSlip = ({ voter, candidate, compact = false }) => (
         { l: "District", v: voter.district }, { l: "Taluka", v: voter.taluka },
         { l: "Bar Association", v: voter.bar_association, full: true },
         { l: "Polling Booth", v: voter.booth_name, full: true },
+        { l: "Enrolment No.", v: voter.enrolment }, { l: "Serial No.", v: voter.sr_no },
       ].map((item, i) => (
         <div key={i} style={{
-          background: "rgba(255,255,255,0.025)", borderRadius: 7, padding: "8px 10px",
-          gridColumn: item.full ? "1/-1" : undefined,
+          background: "rgba(0,0,0,0.02)", borderRadius: 7, padding: "8px 10px",
+          gridColumn: item.full ? "1/-1" : undefined, border: "1px solid rgba(0,0,0,0.04)",
         }}>
-          <div style={{ fontSize: 9, color: C.textDim, textTransform: "uppercase", letterSpacing: 1.3, fontWeight: 600 }}>{item.l}</div>
-          <div style={{ fontSize: 12, fontWeight: 600, marginTop: 2, color: "#c8d0e0", lineHeight: 1.35 }}>{item.v || "—"}</div>
+          <div style={{ fontSize: 9, color: "#64748b", textTransform: "uppercase", letterSpacing: 1.3, fontWeight: 600 }}>{item.l}</div>
+          <div style={{ fontSize: 12, fontWeight: 600, marginTop: 2, color: "#0f172a", lineHeight: 1.35 }}>{item.v || "—"}</div>
         </div>
       ))}
     </div>
 
     {/* Footer */}
     <div style={{
-      marginTop: 12, paddingTop: 10, borderTop: `1px solid ${C.border}`,
-      display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", zIndex: 1,
+      marginTop: 12, paddingTop: 10, borderTop: `1px solid rgba(0,0,0,0.1)`,
+      display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", zIndex: 1, color: "#64748b"
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
         <Icon.Scale />
-        <span style={{ fontSize: 10, color: C.textDim, fontWeight: 600, letterSpacing: 0.8 }}>BCMG ELECTION 2026</span>
+        <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.8, color: "#0f172a" }}>BCMG ELECTION 2026</span>
       </div>
-      <span style={{ fontSize: 10, color: C.textDim }}>24 March 2026</span>
+      <span style={{ fontSize: 12, fontWeight: 600, color: "#0f172a" }}>24 March 2026</span>
     </div>
   </div>
 );
@@ -285,9 +283,27 @@ const VoterModal = ({ voter, candidate, onClose, onLogEvent }) => {
   const sendToVoter = async () => {
     const m = cleanMobile(voter.mobile);
     if (!m) { alert("No mobile number available for this voter."); return; }
-    
+
+    // Step 1: Generate voter slip image and copy to clipboard
+    const node = document.getElementById('voter-slip-capture');
+    if (node) {
+      try {
+        const dataUrl = await htmlToImage.toPng(node, { quality: 0.95 });
+        const res = await fetch(dataUrl);
+        const blob = await res.blob();
+        if (blob && navigator.clipboard && navigator.clipboard.write) {
+          await navigator.clipboard.write([
+            new ClipboardItem({ [blob.type]: blob })
+          ]);
+        }
+      } catch (e) {
+        console.warn('Could not copy slip image to clipboard:', e);
+      }
+    }
+
+    // Step 2: Open WhatsApp directly to voter's number with pre-filled text
     window.open(`https://wa.me/91${m}?text=${encodeURIComponent(genMsg())}`, '_blank');
-    
+
     onLogEvent?.("whatsapp_send", { voterId: voter.id, voterName: voter.name, voterEnrolment: voter.enrolment, boothName: voter.booth_name, district: voter.district, barAssociation: voter.bar_association });
   };
 
@@ -326,24 +342,7 @@ const VoterModal = ({ voter, candidate, onClose, onLogEvent }) => {
           </Btn>
         </div>
 
-        {/* Voter details footer */}
-        <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${C.border}` }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            {[
-              { icon: <Icon.File />, l: "Enrolment", v: voter.enrolment },
-              { icon: <Icon.Map />, l: "District", v: voter.district },
-              { icon: <Icon.Hash />, l: "Sr. No.", v: voter.sr_no },
-            ].map((d, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                <div style={{ color: C.textDim, marginTop: 2 }}>{d.icon}</div>
-                <div>
-                  <div style={{ fontSize: 10, color: C.textDim, textTransform: "uppercase", letterSpacing: 1, fontWeight: 600 }}>{d.l}</div>
-                  <div style={{ fontSize: 13, color: C.text, fontWeight: 600, marginTop: 1 }}>{d.v}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
     </Modal>
   );
@@ -589,7 +588,7 @@ export default function BCMGElectionPortal() {
       const link = document.createElement("link");
       link.id = "bcmg-fonts";
       link.rel = "stylesheet";
-      link.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap";
+      link.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap";
       document.head.appendChild(link);
     }
   }, []);
@@ -785,10 +784,10 @@ function TopBar({ onSettings, onAdmin, isAdmin = false, theme, toggleTheme }) {
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <Icon.Scale />
-        <span style={{ fontWeight: 700, fontSize: 13, color: C.gold, letterSpacing: 0.3, fontFamily: fontSans }}>BCMG Election 2026</span>
+        <span style={{ fontWeight: 700, fontSize: 20, color: C.gold, letterSpacing: 0.3, fontFamily: fontSans }}>BCMG Election 2026</span>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <span style={{ fontSize: 12, color: C.gold, fontWeight: 600, fontFamily: fontSans }}>24 March 2026</span>
+        <span style={{ fontSize: 20, color: C.gold, fontWeight: 600, fontFamily: fontSans }}>24 March 2026</span>
         <button onClick={toggleTheme} title="Toggle Theme" style={{
           background: C.goldDim, border: `1px solid ${C.goldBorder}`, borderRadius: 9, width: 36, height: 36,
           display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: C.gold, marginLeft: 4,
