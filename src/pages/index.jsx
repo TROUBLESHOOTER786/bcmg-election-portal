@@ -279,38 +279,14 @@ const VoterModal = ({ voter, candidate, onClose, onLogEvent }) => {
   const cleanMobile = (m) => { let c = (m || "").replace(/\D/g, ""); if (c.startsWith("91") && c.length > 10) c = c.slice(2); return c; };
 
   const genMsg = () => {
-    return `*Respected ADV. ${voter.name}* ,\n\nWarm Greetings! 🙏\n\nAs you're aware, the BCMG elections are to be held on the 24th of March 2026. Thus, in order to make the process easier for you, I'm sharing your voting details herein below.\n\n*The details are as follows:*\n*Your Enrollment No:* ${voter.enrolment}\n*Your Polling Booth:* ${voter.booth_name}\n*Bar Association:* ${voter.bar_association}\n*Serial Number:* ${voter.sr_no}\n*Room Number:* ${voter.room_no || 'TBD'}\n\nOur legal fraternity needs strong, positive, and proactive representation. Therefore, I earnestly request your valuable support and your *1st Preference Vote* for *ADV. JAYANT D. JAIBHAVE* .\n\n*Voting Details for Adv. Jayant D. Jaibhave:*\n👉 *Ballot Serial No: 6️⃣1️⃣*\n\nA quick reminder for the voting process:\n✔️ Please write '1' or 'one' clearly against Serial No. 61.\n✔️ Please do not forget to give at least 5 preferences in total, otherwise, the vote may be considered invalid.\n\nI hope you're able to give some of your valuable time between 09:00 AM to 06:00 PM on 24th March to cast your vote.\n\nIf you need any help locating the booth or have any questions about the voting process, please feel free to get in touch with me.\n\nWarm regards,\n*ADV. JAYANT D. JAIBHAVE*\n*9503212602*\n\n📌 See Campaign Flyer: ${window.location.origin}/flyer.jpg`;
+    return `*Respected ADV. ${voter.name}* ,\n\nWarm Greetings!\n\nAs you're aware, the BCMG elections are to be held on the 24th of March 2026. Thus, in order to make the process easier for you, I'm sharing your voting details herein below.\n\n*The details are as follows:*\n*Your Enrollment No:* ${voter.enrolment}\n*Your Polling Booth:* ${voter.booth_name}\n*Bar Association:* ${voter.bar_association}\n*Serial Number:* ${voter.sr_no}\n*Room Number:* ${voter.room_no || 'TBD'}\n\nOur legal fraternity needs strong, positive, and proactive representation. Therefore, I earnestly request your valuable support and your *1st Preference Vote* for *ADV. JAYANT D. JAIBHAVE* .\n\n*Voting Details for Adv. Jayant D. Jaibhave:*\n*Ballot Serial No: 61*\n\nA quick reminder for the voting process:\n- Please write '1' or 'one' clearly against Serial No. 61.\n- Please do not forget to give at least 5 preferences in total, otherwise, the vote may be considered invalid.\n\nI hope you're able to give some of your valuable time between 09:00 AM to 06:00 PM on 24th March to cast your vote.\n\nIf you need any help locating the booth or have any questions about the voting process, please feel free to get in touch with me.\n\nWarm regards,\n*ADV. JAYANT D. JAIBHAVE*\n*9503212602*`;
   };
 
   const sendToVoter = async () => {
     const m = cleanMobile(voter.mobile);
     if (!m) { alert("No mobile number available for this voter."); return; }
     
-    const node = document.getElementById('voter-slip-capture');
-    let sharedViaAPI = false;
-    
-    if (node && navigator.share && navigator.canShare) {
-      try {
-        const blob = await htmlToImage.toBlob(node, { quality: 0.95 });
-        if (blob) {
-          const file = new File([blob], `VoterSlip-${voter.name.replace(/\\s+/g, '_')}.png`, { type: blob.type });
-          if (navigator.canShare({ files: [file] })) {
-            await navigator.share({
-              title: 'Voting Details',
-              text: genMsg(),
-              files: [file]
-            });
-            sharedViaAPI = true;
-          }
-        }
-      } catch (e) {
-        console.error('Share error', e);
-      }
-    }
-    
-    if (!sharedViaAPI) {
-      window.open(`https://wa.me/91${m}?text=${encodeURIComponent(genMsg())}`, '_blank');
-    }
+    window.open(`https://wa.me/91${m}?text=${encodeURIComponent(genMsg())}`, '_blank');
     
     onLogEvent?.("whatsapp_send", { voterId: voter.id, voterName: voter.name, voterEnrolment: voter.enrolment, boothName: voter.booth_name, district: voter.district, barAssociation: voter.bar_association });
   };
