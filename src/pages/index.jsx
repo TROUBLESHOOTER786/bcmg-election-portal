@@ -298,7 +298,7 @@ const VoterModal = ({ voter, candidate, onClose, onLogEvent }) => {
   const cleanMobile = (m) => { let c = (m || "").replace(/\D/g, ""); if (c.startsWith("91") && c.length > 10) c = c.slice(2); return c; };
 
   const genMsg = () => {
-    return `*Respected ADV. ${voter.name}* ,\n\nWarm Greetings!\n\nAs you're aware, the BCMG elections are to be held on the 24th of March 2026. Thus, in order to make the process easier for you, I'm sharing your voting details herein below.\n\n*The details are as follows:*\n*Your Enrollment No:* ${voter.enrolment}\n*Your Polling Booth:* ${voter.booth_name}\n*Bar Association:* ${voter.bar_association}\n*Serial Number:* ${voter.sr_no}\n*Room Number:* ${voter.room_no || 'TBD'}\n\nOur legal fraternity needs strong, positive, and proactive representation. Therefore, I earnestly request your valuable support and your *1st Preference Vote* for *ADV. JAYANT D. JAIBHAVE* .\n\n*Voting Details for Adv. Jayant D. Jaibhave:*\n*Ballot Serial No: 61*\n\nA quick reminder for the voting process:\n- Please write '1' or 'one' clearly against Serial No. 61.\n- Please do not forget to give at least 5 preferences in total, otherwise, the vote may be considered invalid.\n\nI hope you're able to give some of your valuable time between 09:00 AM to 06:00 PM on 24th March to cast your vote.\n\nIf you need any help locating the booth or have any questions about the voting process, please feel free to get in touch with me.\n\nWarm regards,\n*ADV. JAYANT D. JAIBHAVE*\n*9503212602*`;
+    return `*Respected ADV. ${voter.name}* ,\n\nWarm Greetings!\n\nAs you're aware, the BCMG elections are to be held on the 24th of March 2026. Thus, in order to make the process easier for you, I'm sharing your voting details herein below.\n\n*The details are as follows:*\n*Your Enrollment No:* ${voter.enrolment}\n*Your Polling Booth:* ${voter.booth_name}\n*Bar Association:* ${voter.bar_association}\n*Serial Number:* ${voter.sr_no}\n*Room Number:* ${voter.room_no || 'TBD'}\n\nOur legal fraternity needs strong, positive, and proactive representation. Therefore, I earnestly request your valuable support and your *1st Preference Vote* for *ADV. JAYANT D. JAIBHAVE* .\n\n*Voting Details for Adv. Jayant D. Jaibhave:*\n*Ballot Serial No: 61*\n\nA quick reminder for the voting process:\n- Please write '1' or 'one' clearly against Serial No. 61.\n- Please do not forget to give at least 5 preferences in total, otherwise, the vote may be considered invalid.\n\nI hope you're able to give some of your valuable time between 09:00 AM to 06:00 PM on 24th March to cast your vote.\n\nIf you need any help locating the booth or have any questions about the voting process, please feel free to get in touch with me.\n\nWarm regards,\n*ADV. JAYANT D. JAIBHAVE*\n*8767186281*`;
   };
 
   const isMobile = () => /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -668,60 +668,79 @@ export default function BCMGElectionPortal() {
       <TopBar onSettings={() => setShowSettings(true)} onAdmin={() => setPage("admin")} theme={theme} toggleTheme={() => setTheme(t => t === "light" ? "dark" : "light")} />
 
       {/* Hero */}
-      <div style={{ textAlign: "center", padding: "44px 20px 16px", position: "relative" }}>
+      <div style={{ padding: "44px 20px 16px", position: "relative", maxWidth: 720, margin: "0 auto" }}>
         <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 600, height: 400, borderRadius: "50%", background: `radial-gradient(circle, rgba(201,168,76,0.05) 0%, transparent 70%)`, pointerEvents: "none" }} />
-        <h1 style={{ fontSize: 38, fontWeight: 700, margin: 0, fontFamily: font, color: C.goldLight, letterSpacing: -0.5, lineHeight: 1.15 }}>
-          Find Your Voting Slip
-        </h1>
-        <p style={{ color: C.textDim, fontSize: 14, marginTop: 8, maxWidth: 460, margin: "8px auto 0", fontFamily: fontSans, lineHeight: 1.5 }}>
-          Search the BCMG Electoral Roll 2026 — Bar Council of Maharashtra & Goa
-        </p>
-      </div>
 
-      {/* Search Box */}
-      <div style={{ maxWidth: 540, margin: "22px auto", padding: "0 20px", position: "relative", zIndex: 10 }}>
-        <div style={{
-          background: "rgba(12,19,34,0.95)", border: `1px solid ${C.goldBorder}`, borderRadius: 16, padding: 6,
-          boxShadow: `0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(201,168,76,0.08)`,
-        }}>
-          {/* Search type tabs */}
-          <div style={{ display: "flex", gap: 3, padding: "4px 4px 0", flexWrap: "wrap" }}>
-            {searchTypes.map(t => (
-              <button key={t.key} onClick={() => { setSearchType(t.key); inputRef.current?.focus(); }}
-                style={{
-                  display: "flex", alignItems: "center", gap: 4, padding: "6px 12px", borderRadius: 7,
-                  border: "none", cursor: "pointer", fontSize: 11, fontWeight: 600, fontFamily: fontSans,
-                  background: searchType === t.key ? C.goldDim : "transparent",
-                  color: searchType === t.key ? C.gold : C.textDim, transition: "all 0.15s",
-                }}>
-                {t.icon} {t.label}
-              </button>
-            ))}
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 28, flexWrap: "wrap", justifyContent: "center" }}>
+          {/* Candidate Photo */}
+          <img src="/JDJ-Ballot.jpeg" alt="ADV. JAYANT D. JAIBHAVE" style={{
+            width: 180, height: 200, borderRadius: 16, objectFit: "cover",
+            border: `3px solid ${C.goldBorder}`, boxShadow: `0 8px 30px rgba(0,0,0,0.3)`,
+          }} />
 
-          {/* Input row */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 14px" }}>
-            <div style={{ color: C.textDim }}><Icon.Search /></div>
-            <input
-              ref={inputRef} value={query}
-              onChange={e => setQuery(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && doSearch()}
-              placeholder={
-                searchType === "name" ? "Search by name..." :
-                  searchType === "enrolment" ? "Enter MAH/XXXX/YYYY..." :
-                    searchType === "mobile" ? "Enter mobile number..." :
-                      "Enter serial number..."
-              }
-              style={{ flex: 1, background: "none", border: "none", outline: "none", color: "#fff", fontSize: 15, padding: "10px 0", fontFamily: fontSans }}
-            />
-            {query && (
-              <button onClick={() => { setQuery(""); setResults([]); setHasSearched(false); inputRef.current?.focus(); }}
-                style={{ background: "rgba(255,255,255,0.08)", border: "none", borderRadius: "50%", width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: C.textMid }}>
-                <Icon.X />
-              </button>
-            )}
+          {/* Text + Search */}
+          <div style={{ flex: 1, minWidth: 280 }}>
+            <h1 style={{ fontSize: 38, fontWeight: 700, margin: 0, fontFamily: font, letterSpacing: -0.5, lineHeight: 1.15 }}>
+              <span style={{ color: "#dc2626", fontFamily: "'Montserrat', sans-serif", fontWeight: 900 }}>61</span>
+              <span style={{ color: C.goldLight }}> : ADV. JAYANT D. JAIBHAVE</span>
+            </h1>
+            <p style={{ color: C.textDim, fontSize: 16, marginTop: 10, fontFamily: fontSans, lineHeight: 1.5 }}>
+              Please cast your First Preference vote at Serial No. 61
+            </p>
+
+            {/* Search Box */}
+            <div style={{
+              background: "rgba(12,19,34,0.95)", border: `1px solid ${C.goldBorder}`, borderRadius: 16, padding: 6,
+              boxShadow: `0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(201,168,76,0.08)`, marginTop: 16,
+            }}>
+              {/* Search type tabs */}
+              <div style={{ display: "flex", gap: 3, padding: "4px 4px 0", flexWrap: "wrap" }}>
+                {searchTypes.map(t => (
+                  <button key={t.key} onClick={() => { setSearchType(t.key); inputRef.current?.focus(); }}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 4, padding: "6px 12px", borderRadius: 7,
+                      border: "none", cursor: "pointer", fontSize: 11, fontWeight: 600, fontFamily: fontSans,
+                      background: searchType === t.key ? C.goldDim : "transparent",
+                      color: searchType === t.key ? C.gold : C.textDim, transition: "all 0.15s",
+                    }}>
+                    {t.icon} {t.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Input row */}
+              <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 14px" }}>
+                <div style={{ color: C.textDim }}><Icon.Search /></div>
+                <input
+                  ref={inputRef} value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && doSearch()}
+                  placeholder={
+                    searchType === "name" ? "Search by name..." :
+                      searchType === "enrolment" ? "Enter MAH/XXXX/YYYY..." :
+                        searchType === "mobile" ? "Enter mobile number..." :
+                          "Enter serial number..."
+                  }
+                  style={{ flex: 1, background: "none", border: "none", outline: "none", color: "#fff", fontSize: 15, padding: "10px 0", fontFamily: fontSans }}
+                />
+                {query && (
+                  <button onClick={() => { setQuery(""); setResults([]); setHasSearched(false); inputRef.current?.focus(); }}
+                    style={{ background: "rgba(255,255,255,0.08)", border: "none", borderRadius: "50%", width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: C.textMid }}>
+                    <Icon.X />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <p style={{ color: C.textDim, fontSize: 13, marginTop: 10, fontFamily: fontSans, letterSpacing: 1.5, fontWeight: 700, textTransform: "uppercase" }}>
+              Search BCMG Electoral Roll 2026
+            </p>
           </div>
         </div>
+      </div>
+
+      {/* Search Results */}
+      <div style={{ maxWidth: 540, margin: "0 auto", padding: "0 20px", position: "relative", zIndex: 10 }}>
 
         {/* Results */}
         {(hasSearched || loading) && (
@@ -776,8 +795,8 @@ export default function BCMGElectionPortal() {
       {/* Stats Row */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, maxWidth: 600, margin: "30px auto", padding: "0 20px" }}>
         {[
-          { label: "Total Voters", value: "1,96,054", color: C.gold },
-          { label: "Election Date", value: "24 Mar", color: "#60a5fa" },
+          { label: "Total Voters", value: "1,93,247", color: C.gold },
+          { label: "Election Date", value: "24 March", color: "#60a5fa" },
           { label: "Election", value: "BCMG", sub: "Maha & Goa", color: "#a78bfa" },
           { label: "Searches", value: stats.searches, color: C.green },
         ].map((s, i) => (
@@ -813,9 +832,9 @@ export default function BCMGElectionPortal() {
 
       {/* Footer */}
       <div style={{ textAlign: "center", padding: "28px 20px", borderTop: `1px solid ${C.border}`, marginTop: 40 }}>
-        <div style={{ fontSize: 11, color: C.textDim, lineHeight: 1.6 }}>
-          BCMG Election 2026 — Digital Voter Outreach Portal<br />
-          Bar Council of Maharashtra & Goa
+        <div style={{ fontSize: 15, color: C.textDim, lineHeight: 1.6 }}>
+          BCMG Election 2026 — ADV. SAYYED HUZAIFA TAHER<br />
+          POLYMATH
         </div>
       </div>
 
